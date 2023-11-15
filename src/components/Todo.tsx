@@ -6,10 +6,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 
+
+
+
 interface Todo {
     _id: number;
     text: string;
 }
+const API_URL = `${import.meta.env.VITE_BASE_URL}/todo`
 
 const TodoList: React.FC = () => {
     const [tasks, setTasks] = useState<Todo[]>([]);
@@ -38,7 +42,7 @@ const TodoList: React.FC = () => {
 
     const addTask = (newTask: string) => {
         if (newTask.trim() !== '') {
-            axios.post('http://localhost:5000/api/todo', { text: newTask })
+            axios.post(API_URL, { text: newTask })
                 .then(response => {
                     setTasks([...tasks, response.data]);
                     formik.resetForm();
@@ -59,7 +63,7 @@ const TodoList: React.FC = () => {
     };
 
     const removeTask = (taskId: number) => {
-        axios.delete(`http://localhost:5000/api/todo/${taskId}`)
+        axios.delete(`${API_URL}/${taskId}`)
             .then(() => {
                 setTasks(tasks.filter(task => task._id !== taskId));
                 Swal.fire({
